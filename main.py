@@ -1,6 +1,6 @@
 ######  The classes must be placed in separate python files  ######
 
-
+# function to print the selection menu
 def selectionMenu():
     print('*' * 62)
     print('* ST1507 DSAA: Expression Evaluator & Sorter {:>17}'.format('*'))
@@ -27,46 +27,42 @@ def selectionMenu():
         else:
             print("Invalid input! Please input 1, 2 or 3!")
 
-# function to carry out choice 1  
-def choice1():
-    exp = input("Please enter the expression you want to evaluate: \n")
-    print()
-    print("Expression Tree: ")
-    tree = buildParseTree(exp)
-    tree.printPreorder(0)
-    print()
-    print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
-    tempKey = input("Press any key, to continue....")
-    selectionMenu()
-
+# stack class 
 class Stack:
     def __init__(self):
         self.__list= []
         
+    # empty list
     def isEmpty(self):
         return self.__list == []
     
+    # get size of list
     def size(self):
         return len(self.__list)
     
+    # clear items of list
     def clear(self):
         self.__list.clear() 
-        
+    
+    # push item into back of list
     def push(self, item):
         self.__list.append(item)
         
+    # extract last item of list
     def pop(self):
         if self.isEmpty():
             return None
         else:
             return self.__list.pop()
         
+    # get items of list
     def get(self):
         if self.isEmpty():
             return None
         else:
             return self.__list[-1]
-        
+    
+    # returns output in neat format
     def __str__(self):
         output = '<'
         for i in range( len(self.__list) ):
@@ -84,18 +80,23 @@ class BinaryTree:
         self.leftTree = leftTree
         self.rightTree = rightTree
         
+    # stores an object in root node
     def setKey(self, key):
         self.key = key
         
+    # returns object stored in root node
     def getKey(self):
         return self.key
     
+    # returns binary tree stored as child at left hand side
     def getLeftTree(self):
         return self.leftTree
     
+    # returns binary tree stored as child at right hand side
     def getRightTree(self):
         return self.rightTree
     
+    # creates a new binary tree and inserts it as child at left hand side
     def insertLeft(self, key):
         if self.leftTree == None:
             self.leftTree = BinaryTree(key)
@@ -103,6 +104,7 @@ class BinaryTree:
             t = BinaryTree(key)
             self.leftTree , t.leftTree = t, self.leftTree
             
+    # creates a new binary tree and inserts it as child at right hand side
     def insertRight(self, key):
         if self.rightTree == None:
             self.rightTree = BinaryTree(key)
@@ -110,18 +112,15 @@ class BinaryTree:
             t = BinaryTree(key)
             self.rightTree , t.rightTree = t, self.rightTree
             
+    # print the expression tree in a pre-order manner
     def printPreorder(self, level):
-        # if self.leftTree != None:
-        #     self.leftTree.printPreorder(level+1)
-        # print( str(level*'-') + str(self.key))
-        # if self.rightTree != None:
-        #     self.rightTree.printPreorder(level+1)
         print( str(level*'-') + str(self.key))
         if self.leftTree != None:
             self.leftTree.printPreorder(level+1)
         if self.rightTree != None:
             self.rightTree.printPreorder(level+1) 
 
+# function to build a parse tree
 def buildParseTree(exp):
     # tokenize the expression
     tokens = []
@@ -152,22 +151,18 @@ def buildParseTree(exp):
     currentTree = tree
     
     for t in tokens:
-        # RULE 1: If token is '(' add a new node as left child
-        # and descend into that node
+        # RULE 1: If token is '(' add a new node as left child and descend into that node
         if t == '(':
             currentTree.insertLeft('?')
             stack.push(currentTree)
             currentTree = currentTree.getLeftTree()
-        # RULE 2: If token is operator set key of current node
-        # to that operator and add a new node as right child
-        # and descend into that node
+        # RULE 2: If token is operator, set key of current node to that operator and add a new node as right child and descend into that node
         elif t in ['+', '-', '*', '/', '**']:
             currentTree.setKey(t)
             currentTree.insertRight('?')
             stack.push(currentTree)
             currentTree = currentTree.getRightTree() 
-        # RULE 3: If token is number, set key of the current node
-        # to that number and return to parent
+        # RULE 3: If token is number, set key of the current node to that number and return to parent
         elif t not in ['+', '-', '*', '/', '**', ')'] :
             currentTree.setKey(t)
             parent = stack.pop()
@@ -179,11 +174,13 @@ def buildParseTree(exp):
             raise ValueError
     return tree
 
+# function to evaluate the expression
 def evaluate(tree):
     leftTree = tree.getLeftTree()
     rightTree = tree.getRightTree()
     op = tree.getKey()
     
+    # loop to return the true value of each pair of terms of the expression
     if leftTree != None and rightTree != None:
         if op == '+':
             return float(evaluate(leftTree)) + float(evaluate(rightTree))
@@ -197,7 +194,21 @@ def evaluate(tree):
             return float(evaluate(leftTree)) / float(evaluate(rightTree))
     else:
         return tree.getKey()
-    
+
+# main functions
+# function to carry out choice 1  
+def choice1():
+    exp = input("Please enter the expression you want to evaluate: \n")
+    print()
+    print("Expression Tree: ")
+    tree = buildParseTree(exp)
+    tree.printPreorder(0)
+    print()
+    print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
+    tempKey = input("Press any key, to continue....")
+    selectionMenu()
+
+# function to carry out choice 3
 def choice3():
     print("Bye, thanks for using ST1507 DSAA: Expression Evaluator & Sorter")
     exit()
