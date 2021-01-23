@@ -1,4 +1,5 @@
 ######  The classes must be placed in separate python files  ######
+import os.path
 
 # function to print the selection menu
 def selectionMenu():
@@ -22,12 +23,13 @@ def selectionMenu():
         Choice = input('Enter Choice: ')
         if Choice == '1':
             choice1()
+        if Choice == '2':
+            choice2()
         if Choice == '3':
             choice3()
         else:
             print("Invalid input! Please input 1, 2 or 3!")
 
-# stack class 
 class Stack:
     def __init__(self):
         self.__list= []
@@ -114,7 +116,7 @@ class BinaryTree:
             
     # print the expression tree in a pre-order manner
     def printPreorder(self, level):
-        print( str(level*'-') + str(self.key))
+        print( str(level*'#') + str(self.key))
         if self.leftTree != None:
             self.leftTree.printPreorder(level+1)
         if self.rightTree != None:
@@ -195,6 +197,96 @@ def evaluate(tree):
     else:
         return tree.getKey()
 
+class Node:
+    # Constructor
+    def __init__(self):
+        self.nextNode = None
+
+class Expression(Node):
+    def __init__(self, name):
+        self.name = name
+        super().__init__()
+        
+    def __str__(self):
+        return f"'{self.name}'"
+    
+    def __eq__(self,otherNode):
+        if otherNode == None:
+            return False
+        else:
+            return self.name == otherNode.name
+        
+    def __lt__(self, otherNode):
+        if otherNode == None:
+            raise TypeError("'<' not supported between instances of 'Expression' and 'NoneType'")
+        if len(self.name) == len(otherNode.name):
+            return self.name[0] < otherNode.name[0]
+        return len(self.name) < len(otherNode.name)
+
+class sortedList:
+    # constructor
+    def __init__(self):
+        self.headNode = None
+        self.currentNode = None
+        self.length = 0
+
+    # append the next node as the head node
+    def __appendToHead(self, newNode):
+        oldHeadNode = self.headNode
+        self.headNode = newNode
+        self.headNode.nextNode = oldHeadNode
+        self.length += 1
+
+    # insert new node
+    def insert(self, newNode):
+        self.length += 1
+        # if list is empty
+        if self.headNode == None:
+            self.headNode = newNode
+            return
+        # check if new node is going to be the new head node
+        if newNode < self.headNode:
+            self.__appendToHead(newNode)
+            return
+        # check if new node is going to be inserted between any pair of nodes (left,right)
+        leftNode = self.headNode
+        rightNode = self.headNode.nextNode
+        while rightNode != None:
+            if newNode < rightNode:
+                leftNode.nextNode = newNode
+                newNode.nextNode = rightNode
+                return
+            leftNode = rightNode
+            rightNode = rightNode.nextNode
+        # if does not meet any criteria above, add to tail
+        leftNode.nextNode = newNode
+
+    # create the output format
+    def __str__(self):
+        # We start at the head
+        output =""
+        node= self.headNode
+        firstNode = True
+        while node != None:
+            if firstNode:
+                output = node.__str__()
+                firstNode = False
+            else:
+                output += (',' + node.__str__())
+            node= node.nextNode
+        return output
+
+    # reset for each iteration
+    def resetForIteration(self):
+        self.currentNode = self.headNode
+        return self.currentNode
+
+    # call the current node as the next node so that all nodes will be checked
+    def nextNode(self):
+        self.currentNode = self.currentNode.nextNode
+        return self.currentNode
+
+
 # main functions
 # function to carry out choice 1  
 def choice1():
@@ -205,7 +297,48 @@ def choice1():
     tree.printPreorder(0)
     print()
     print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
-    tempKey = input("Press any key, to continue....")
+    input("Press any key, to continue....")
+    selectionMenu()
+
+def choice2():
+    print()
+    inputFile = input("Please enter input file: ")
+    while True:
+        if os.path.isfile(inputFile):
+            break
+        else:
+            print('Invalid file name! File not found!')
+            inputFile = input("Please enter valid input file: ")        
+    outputFile = input("please enter output file: ")
+    print()
+    print(">>>Evaluation and sorting started")
+    l = sortedList()
+    # read expressions from input file and sort in list
+    f = open(inputFile, 'r')
+    for expressions in f:
+        expressions = expressions.strip() 
+        l.insert(Expression( expressions ))
+    f.close()
+    # write sorted expressions into output file
+    f = open(outputFile, 'w')
+    expressions = l.resetForIteration()
+    while expressions != None:
+        f.write(expressions.name+"\n")
+        expressions = l.nextNode()
+    f.close()
+    f = open(outputFile, 'r')
+    for exp in f:
+        exp = exp.split()
+        for elem in exp:
+            # print(elem)
+            tree = buildParseTree(elem)
+            # tree.printPreorder(0)
+            print(evaluate(tree))
+    
+    print(">>>Evaluation and sorting completed!")
+    # tree = buildParseTree(l)
+    # print(tree)
+    input("Press any key, to continue....")
     selectionMenu()
 
 # function to carry out choice 3
