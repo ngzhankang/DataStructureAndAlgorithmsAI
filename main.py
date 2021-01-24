@@ -16,16 +16,16 @@ def selectionMenu():
     print("  2. Sort expressions")
     print("  3. Exit")
 
-    Choice = ''
+    choice = ''
     
     # loop to run the selection menu
-    while Choice != '3':
-        Choice = input('Enter Choice: ')
-        if Choice == '1':
+    while choice != '3':
+        choice = input('Enter Choice: ')
+        if choice == '1':
             choice1()
-        if Choice == '2':
+        if choice == '2':
             choice2()
-        if Choice == '3':
+        if choice == '3':
             choice3()
         else:
             print("Invalid input! Please input 1, 2 or 3!")
@@ -122,8 +122,9 @@ class BinaryTree:
         if self.rightTree != None:
             self.rightTree.printPreorder(level+1) 
 
-# function to build a parse tree
+## function to build a parse tree
 def buildParseTree(exp):
+
     # tokenize the expression
     tokens = []
     no = ""
@@ -134,13 +135,15 @@ def buildParseTree(exp):
         # concatenate digits or '.' to number
         elif exp[x].isdigit() or (exp[x] == "."):
             no += exp[x]
+        # concatenate negative symbol to number
+        elif exp[x] == '-' and exp[x-1] in ['+', '-', '*', '/', '**', '(']:
+            no += exp[x]
         # concatenate asterik to another asterik
         elif (exp[x] == "*" and exp[x-1] == "*"):
             del tokens[-1]
             ast = '**'
             tokens.append(ast)
             ast = ""
-        # other token: append number if any, and then token
         else:
             if no != "":
                 tokens.append(no)
@@ -219,9 +222,9 @@ class Expression(Node):
     def __lt__(self, otherNode):
         if otherNode == None:
             raise TypeError("'<' not supported between instances of 'Expression' and 'NoneType'")
-        if len(self.name) == len(otherNode.name):
-            return self.name[0] < otherNode.name[0]
-        return len(self.name) < len(otherNode.name)
+        if self.name == otherNode.name:
+            return self.name < otherNode.name
+        return self.name < otherNode.name
 
 class sortedList:
     # constructor
@@ -229,7 +232,6 @@ class sortedList:
         self.headNode = None
         self.currentNode = None
         self.length = 0
-
     # append the next node as the head node
     def __appendToHead(self, newNode):
         oldHeadNode = self.headNode
@@ -304,8 +306,7 @@ def choice2():
     print()
     inputFile = input("Please enter input file: ")
     while True:
-        if os.path.isfile(inputFile):
-            break
+        if os.path.isfile(inputFile): break
         else:
             print('Invalid file name! File not found!')
             inputFile = input("Please enter valid input file: ")        
@@ -313,27 +314,29 @@ def choice2():
     print()
     print(">>>Evaluation and sorting started")
     l = sortedList()
+
     # read expressions from input file and sort in list
     f = open(inputFile, 'r')
     for expressions in f:
-        expressions = expressions.strip() 
-        l.insert(Expression( expressions ))
+        expressions = expressions.strip()
+        tree = buildParseTree(expressions)
+
+        # here we evaluate the expression and then sort by value
+        print(Expression(evaluate(tree)))
+        # l.insert(Expression(evaluate(tree)), expressions)
+        print(expressions)
+        print()
     f.close()
+
     # write sorted expressions into output file
-    f = open(outputFile, 'w')
-    expressions = l.resetForIteration()
-    while expressions != None:
-        f.write(expressions.name+"\n")
-        expressions = l.nextNode()
-    f.close()
-    f = open(outputFile, 'r')
-    for exp in f:
-        exp = exp.split()
-        for elem in exp:
-            # print(elem)
-            tree = buildParseTree(elem)
-            # tree.printPreorder(0)
-            print(evaluate(tree))
+    # f = open(outputFile, 'w')
+    # expressions = l.resetForIteration()
+    # while expressions != None:
+    #     print(expressions, 'HERE')
+    #     f.write(expressions.name+"\n")
+    #     expressions = l.nextNode()
+    # f.close()
+
     
     print(">>>Evaluation and sorting completed!")
     # tree = buildParseTree(l)
