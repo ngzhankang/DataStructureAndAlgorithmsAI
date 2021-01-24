@@ -52,6 +52,9 @@ def choice1():
     selectionMenu()
 
 def choice2():
+    # create a compare list to append the corrected list
+    compare_list = []
+
     print()
     inputFile = input("Please enter input file: ")
     while True:
@@ -72,8 +75,15 @@ def choice2():
 
         # here we evaluate the expression and then sort by value
         print(Expression(evaluate(tree)))
-        # l.insert(Expression(evaluate(tree)), expressions)
-        print(expressions)
+        l.insert(Expression(evaluate(tree)))
+
+        # append into an array for comparison
+        if len(compare_list) == 0:
+            compare_list.append(l)
+        else:
+            compare_list.remove(compare_list[0])
+            compare_list.append(l)
+        print(compare_list)
         print()
     f.close()
 

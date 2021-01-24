@@ -4,6 +4,8 @@ class sortedList:
         self.headNode = None
         self.currentNode = None
         self.length = 0
+        self.compare_list = []
+
     # append the next node as the head node
     def __appendToHead(self, newNode):
         oldHeadNode = self.headNode
@@ -49,7 +51,9 @@ class sortedList:
                 output += (',' + node.__str__())
             node= node.nextNode
         return output
-    
+    # we want to get the values inside so we need this method
+    def __repr__(self):
+        return self.__str__()
     # reset for each iteration
     def resetForIteration(self):
         self.currentNode = self.headNode
