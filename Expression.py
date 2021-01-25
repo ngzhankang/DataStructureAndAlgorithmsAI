@@ -7,6 +7,9 @@ class Expression(Node):
         
     def __str__(self):
         return f"'{self.name}'"
+
+    def __repr__(self):
+        return self.__str__()
     
     def __eq__(self,otherNode):
         if otherNode == None:
