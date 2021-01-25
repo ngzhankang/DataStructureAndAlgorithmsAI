@@ -218,10 +218,19 @@ def choice2():
                 new_list[-1].append(n)
             else: new_list.append([n])
     print(new_list)
+    
+    # sort the lists according to length of expressions
+    def sortLength(tup):
+        for i in new_list:
+            for x in i:
+                # print(str(x[0]))
+                if len(str(x[0])) > len(str(x+1[0])):
+                    tup[x], tup[x + 1] = tup[x + 1], tup[x]
+        return tup
 
-    # sort the lists according to tuple length
-    
-    
+    print(sortLength(new_list))
+  
+
 
 
     # append into the HashTable
@@ -246,9 +255,7 @@ def choice2():
     # f.close()
 
     
-    print(">>>Evaluation and sorting completed!");
-    # tree = buildParseTree(l)
-    # print(tree)
+    print(">>>Evaluation and sorting completed!")
     input("Press any key, to continue....")
     selectionMenu()
 
