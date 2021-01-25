@@ -198,10 +198,8 @@ def choice2():
 
     # change the positions of key and value in the dictionary arranged from smallest val to largest val
     def order(x, y):
-        if x[1] < y[1]:
-            return x, y
-        else:
-            return y, x
+        if x[1] < y[1]: return x, y
+        else: return y, x
             
     # do a bubble sort
     def bubble(mydict):
@@ -214,29 +212,15 @@ def choice2():
     sorted_tuples = bubble(dictionary)
     new_list = []
     for n in sorted_tuples:
-        if len(new_list) == 0:
-            new_list.append([n])
+        if len(new_list) == 0: new_list.append([n])
         else:
             if new_list[-1][-1][1] == n[1]:
                 new_list[-1].append(n)
-            else:
-                new_list.append([n])
+            else: new_list.append([n])
     print(new_list)
 
     # sort the lists according to tuple length
     
-
-    # print(sorted_tuples)
-    # output = {}
-    # for x, y in sorted_tuples:
-    #     if y in output:
-    #         output[y].append((x, y))
-    #     else:
-    #         output[y] = [(x, y)]
-    # print(output)
-    
-    # sort base on each length of the equations by doing a mergeSort
-    # mergeSort()
     
 
 
