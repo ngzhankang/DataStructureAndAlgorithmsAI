@@ -190,8 +190,9 @@ def choice2():
 
         # here we evaluate the expression and then sort by value
         eqn_list.append(expressions)
-        unstructured_list.append(Expression(evaluate(tree)))
         l.insert(Expression(evaluate(tree)))
+        unstructured_list.append(Expression(evaluate(tree)))
+    f.close()
 
     # make a dictionary for the eqn and the values
     dictionary = dict(zip(eqn_list, unstructured_list))
@@ -218,18 +219,24 @@ def choice2():
                 new_list[-1].append(n)
             else: new_list.append([n])
     print(new_list)
+    print()
     
     # sort the lists according to length of expressions
     def sortLength(tup):
-        for i in new_list:
-            for x in i:
-                # print(str(x[0]))
-                if len(str(x[0])) > len(str(x+1[0])):
-                    tup[x], tup[x + 1] = tup[x + 1], tup[x]
+        lst = len(tup)
+        for i in range(0, lst):
+            for x in range(0, i):
+                print(x)
+                for j in range(0, lst-x-1):
+                    # print(tup[j][0])
+                    if (len(tup[j][0]) > len(tup[j+1][0])):
+                        temp = tup[j]
+                        tup[j] = tup[j+1]
+                        tup[j+1] = temp
         return tup
 
     print(sortLength(new_list))
-  
+    
 
 
 
@@ -243,15 +250,13 @@ def choice2():
     #     eqnTable[i] = 
     # HashTable.sorting(eqn_list, unstructured_list, structured_list)
 
-    f.close()
 
     # write sorted expressions into output file
     # f = open(outputFile, 'w')
-    # expressions = l.resetForIteration()
-    # while expressions != None:
-    #     print(expressions, 'HERE')
-    #     f.write(expressions.name+"\n")
-    #     expressions = l.nextNode()
+    # Expression = l.resetForIteration()
+    # while Expression != None:
+    #     f.write(float(str(Expression.name+"\n")))
+    #     Expression = l.nextNode()
     # f.close()
 
     
