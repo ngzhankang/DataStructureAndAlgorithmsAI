@@ -1,5 +1,5 @@
 class BinaryTree:
-    def __init__(self,key, leftTree = None, rightTree = None):
+    def __init__(self, key, leftTree = None, rightTree = None):
         self.key = key
         self.leftTree = leftTree
         self.rightTree = rightTree
@@ -7,7 +7,7 @@ class BinaryTree:
     # stores an object in root node
     def setKey(self, key):
         self.key = key
-        
+    
     # returns object stored in root node
     def getKey(self):
         return self.key
@@ -38,8 +38,24 @@ class BinaryTree:
             
     # print the expression tree in a pre-order manner
     def printPreorder(self, level):
-        print( str(level*'#') + str(self.key))
+        print(str(level*'#') + str(self.key))
         if self.leftTree != None:
             self.leftTree.printPreorder(level+1)
         if self.rightTree != None:
             self.rightTree.printPreorder(level+1)
+
+    # print the expression tree in a post-order manner
+    def printPostorder(self, level):
+        if self.leftTree != None:
+            self.leftTree.printPostorder(level+1)
+        if self.rightTree != None:
+            self.rightTree.printPostorder(level+1)
+        print(str(level*'#') + str(self.key))
+
+    # print the expression tree in a in-order manner
+    def printInorder(self, level):
+        if self.leftTree != None:
+            self.leftTree.printInorder(level+1)
+        print(str(level*'#') + str(self.key))
+        if self.rightTree != None:
+            self.rightTree.printInorder(level+1)

@@ -6,6 +6,7 @@ from sortedList import sortedList
 from stack import Stack
 from HashTable import HashTable
 from Equations import Equations
+from treeLayout import treeLayout
 
 # function to print the selection menu
 def selectionMenu():
@@ -58,6 +59,12 @@ def buildParseTree(exp):
             ast = '**'
             tokens.append(ast)
             ast = ""
+        # concatenate slash to another slash
+        elif (exp[x] == "/" and exp[x-1] == "/"):
+            del tokens[-1]
+            ast = "//"
+            tokens.append(ast)
+            ast = ""
         else:
             if no != "":
                 tokens.append(no)
@@ -76,13 +83,13 @@ def buildParseTree(exp):
             stack.push(currentTree)
             currentTree = currentTree.getLeftTree()
         # RULE 2: If token is operator, set key of current node to that operator and add a new node as right child and descend into that node
-        elif t in ['+', '-', '*', '/', '**']:
+        elif t in ['+', '-', '*', '/', '**', '//', '%']:
             currentTree.setKey(t)
             currentTree.insertRight('?')
             stack.push(currentTree)
             currentTree = currentTree.getRightTree() 
         # RULE 3: If token is number, set key of the current node to that number and return to parent
-        elif t not in ['+', '-', '*', '/', '**', ')'] :
+        elif t not in ['+', '-', '*', '/', '**', '//', '%', ')'] :
             currentTree.setKey(t)
             parent = stack.pop()
             currentTree = parent
@@ -111,6 +118,10 @@ def evaluate(tree):
             return float(evaluate(leftTree)) ** float(evaluate(rightTree))
         elif op == '/':
             return float(evaluate(leftTree)) / float(evaluate(rightTree))
+        elif op == '//':
+            return float(evaluate(leftTree)) // float(evaluate(rightTree))
+        elif op == "%":
+            return float(evaluate(leftTree)) % float(evaluate(rightTree))
     else:
         return tree.getKey()
 
@@ -156,20 +167,51 @@ def mergeSort(l):
 def choice1():
     exp = input("Please enter the expression you want to evaluate: \n")
     print()
-    print("Expression Tree: ")
     tree = buildParseTree(exp)
-    tree.printPreorder(0)
-    print()
-    print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
-    input("Press any key, to continue....")
-    selectionMenu()
+    print("How do you want to print the parse tree?")
+    print("  1. Pre-order")
+    print("  2. Post-order")
+    print("  3. In-order")
+    print("  4. Exit")
+    printSelect = ''
+    while printSelect != '4':
+        printSelect = input(">>> ")
+        print()
+        if printSelect == '1':
+            print("Expression Tree: ")
+            tree.printPreorder(0)
+            print()
+            # tl = treeLayout(tree)
+            # for n in (BinaryTree):
+            #     tl.insert(BinaryTree)
+            # tl.display()
+            print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
+            input("Press any key, to continue....")
+            selectionMenu()
+        if printSelect == '2':
+            print("Expression Tree: ")
+            tree.printPostorder(0)
+            print()
+            print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
+            input("Press any key, to continue....")
+            selectionMenu()
+        if printSelect == '3':
+            print("Expression Tree: ")
+            tree.printInorder(0)
+            print()
+            print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
+            input("Press any key, to continue....")
+            selectionMenu()
+        if printSelect == '4':
+            choice3()
+        else:
+            print("Invalid input! Please input 1, 2, 3 or 4!")
 
 # function to carry out choice 2
 def choice2():
     # create a compare list to append the corrected list
     unstructured_list = []
     eqn_list = []
-
     print()
     inputFile = input("Please enter input file: ")
     while True:
@@ -226,9 +268,7 @@ def choice2():
         lst = len(tup)
         for i in range(0, lst):
             for x in range(0, i):
-                print(x)
                 for j in range(0, lst-x-1):
-                    # print(tup[j][0])
                     if (len(tup[j][0]) > len(tup[j+1][0])):
                         temp = tup[j]
                         tup[j] = tup[j+1]
