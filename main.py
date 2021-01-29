@@ -1,6 +1,7 @@
 import os.path
 from BinaryTree import BinaryTree
 from Expression import Expression
+from Expression2 import Expression2
 from node import Node
 from sortedList import sortedList
 from stack import Stack
@@ -127,40 +128,41 @@ def evaluate(tree):
 
 # function to sort the equations by length
 def mergeSort(l):
-    if len(l) > 1:
-        mid = int (len(l)/2) # Split the length of list into 2 to speed up
-        leftHalf = l[:mid] # Left side of the list
-        rightHalf = l[mid:] # Right side of list
-        mergeSort(leftHalf)
-        mergeSort(rightHalf)
-        
-        # Decalare the starting indexes as 0
-        leftIndex,rightIndex,mergeIndex = 0,0,0
-        
-        # Declare mergeList as l (list)
-        mergeList = l
-          
-        # Handle those items still left in both the left half and right half
-        while leftIndex < len(leftHalf) and rightIndex < len(rightHalf):
-            if leftHalf[leftIndex] < rightHalf[rightIndex]:
+    for i in l:
+        if len(l) > 1:
+            mid = int (len(l)/2) # Split the length of list into 2 to speed up
+            leftHalf = l[:mid] # Left side of the list
+            rightHalf = l[mid:] # Right side of list
+            mergeSort(leftHalf)
+            mergeSort(rightHalf)
+            
+            # Decalare the starting indexes as 0
+            leftIndex,rightIndex,mergeIndex = 0,0,0
+            
+            # Declare mergeList as l (list)
+            mergeList = l
+            
+            # Handle those items still left in both the left half and right half
+            while leftIndex < len(leftHalf) and rightIndex < len(rightHalf):
+                if leftHalf[leftIndex] < rightHalf[rightIndex]:
+                    mergeList[mergeIndex] = leftHalf[leftIndex]
+                    leftIndex+=1
+                else:
+                    mergeList[mergeIndex] = rightHalf[rightIndex]
+                    rightIndex+=1
+                mergeIndex+=1
+
+            # Handle those items still left in the left Half
+            while leftIndex < len(leftHalf):
                 mergeList[mergeIndex] = leftHalf[leftIndex]
                 leftIndex+=1
-            else:
+                mergeIndex+=1
+                
+            # Handle those items still left in the right Half
+            while rightIndex < len(rightHalf):
                 mergeList[mergeIndex] = rightHalf[rightIndex]
                 rightIndex+=1
-            mergeIndex+=1
-
-        # Handle those items still left in the left Half
-        while leftIndex < len(leftHalf):
-            mergeList[mergeIndex] = leftHalf[leftIndex]
-            leftIndex+=1
-            mergeIndex+=1
-            
-        # Handle those items still left in the right Half
-        while rightIndex < len(rightHalf):
-            mergeList[mergeIndex] = rightHalf[rightIndex]
-            rightIndex+=1
-            mergeIndex+=1
+                mergeIndex+=1
 
 # main functions
 # function to carry out choice 1  
@@ -260,22 +262,34 @@ def choice2():
             if new_list[-1][-1][1] == n[1]:
                 new_list[-1].append(n)
             else: new_list.append([n])
-    print(new_list)
-    print()
     
-    # sort the lists according to length of expressions
-    def sortLength(tup):
-        lst = len(tup)
-        for i in range(0, lst):
-            for x in range(0, i):
-                for j in range(0, lst-x-1):
-                    if (len(tup[j][0]) > len(tup[j+1][0])):
-                        temp = tup[j]
-                        tup[j] = tup[j+1]
-                        tup[j+1] = temp
-        return tup
+    def sortLength(lists):
+        index = 0 # this is the index to determine location in the big list
+        for x in lists:
+            # if it is a single element list
+            if len(x) == 1:
+                index += 1
+                continue
+            else:
+                lista = []
+                # if it is a multiple element lists
+                for n in x: # loop through the big list
+                    lista.append(Expression2(n[0]))
 
-    print(sortLength(new_list))
+                mergeSort(lista)
+                
+                temp_list = []
+                for i in range(0, len(lista), 1):
+                    temp_tuple = list(x[i])
+                    temp_tuple[0] = lista[i]
+                    back_tuple = tuple(temp_tuple)
+                    temp_list.append(back_tuple)
+
+                lists[index] = temp_list
+                index += 1
+        return lists
+
+    print(sortLength(new_list), "HIHI")
     
 
 
