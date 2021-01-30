@@ -5,7 +5,7 @@ from Expression import Expression
 from Expression2 import Expression2
 from node import Node
 from sortedList import sortedList
-from stack import Stack
+from Stack import Stack
 from treeLayout import treeLayout
 
 # print the selection menu
