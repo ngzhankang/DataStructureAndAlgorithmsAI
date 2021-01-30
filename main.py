@@ -6,7 +6,6 @@ from Expression2 import Expression2
 from node import Node
 from sortedList import sortedList
 from stack import Stack
-from Equations import Equations
 from treeLayout import treeLayout
 
 # print the selection menu
