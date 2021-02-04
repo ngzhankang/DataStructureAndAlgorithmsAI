@@ -1,3 +1,4 @@
+# sort the nodes using sorted list
 class sortedList:
     # constructor
     def __init__(self):

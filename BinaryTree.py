@@ -1,3 +1,4 @@
+# creates the binary tree
 class BinaryTree:
     def __init__(self, key, leftTree = None, rightTree = None):
         self.key = key
@@ -59,3 +60,12 @@ class BinaryTree:
         print(str(level*'#') + str(self.key))
         if self.rightTree != None:
             self.rightTree.printInorder(level+1)
+
+    def printIt(self, level):
+        print(str(self.key))
+        if self.leftTree != None:
+            self.leftTree.printIt(level+1)
+        if self.rightTree != None:
+            self.rightTree.printIt(level+1)
+
+  

@@ -1,0 +1,11 @@
+- Ability to support additional operators other than the required ones (Flooring & Modulus)
+- Ability for user to choose between sorting values by ascending or descending order
+- Ability for user to choose the way of printing the binary tree (preorder, postorder, inorder)
+- Printing of binary expression tree visually
+
+
+
+
+## Tokenization extra support
+- Handle -+, +-, --, ++ when evaulating experession
+- Remove empty spaces as might cause disruption for e.g (2+(3 + - 1)) changed to (2+(3+-1))

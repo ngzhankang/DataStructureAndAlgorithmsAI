@@ -1,5 +1,6 @@
 from node import Node
 
+# to return the sorting based on length of equation
 class Expression2(Node):
     def __init__(self, name):
         self.name = name
