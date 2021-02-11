@@ -9,7 +9,7 @@ class newNode:
 		self.leftTree = None
 		self.rightTree = None
 
-# function to print binary tree in 2D.
+# function to print binary tree in 2D
 def print2DUtil(root, space) : 
 	# base case if there is no root
 	if (root == None) : 

@@ -1,13 +1,15 @@
 # import necessary classes and libraries
 import os.path
 import math
-from BinaryTree import BinaryTree
-from Expression import Expression
-from Expression2 import Expression2
-from node import Node
+from binaryTree import binaryTree
+from sortValue import sortValue
+from sortLength import sortLength
+from node import node
 from sortedList import sortedList
-from Stack import Stack
+from stack import stack
 from treeLayout import newNode, print2D, print2DUtil
+
+stack = stack()
 
 # print the selection menu
 def selectionMenu():
@@ -50,18 +52,24 @@ def buildParseTree(exp):
         # concatenate digits or '.' to number
         elif exp[x].isdigit() or (exp[x] == "."):
             no += exp[x]
-        # concatenate negative symbol to number
-        elif exp[x] == '-' and exp[x-1] in ['+', '-', '*', '/', '**', 'sin', '(']:
-            no += exp[x]
-        # concatenate positive symbol to number
-        elif exp[x] == '+' and exp[x-1] in ['+', '-', '*', '/', '**', 'sin', '(']:
-            no += exp[x]
+        # concatenate subtraction and subtraction or addition and addition to be addition
+        elif (exp[x] == '-' and exp[x-1] == '-') or (exp[x] == '+' and exp[x-1] == '+'):
+            del tokens[-1]
+            ast = '+'
+            tokens.append(ast)
+            ast = ""
         # concatenate subtraction and addition to be subtraction
         elif (exp[x] == '-' and exp[x-1] == '+') or (exp[x] == '+' and exp[x-1] == '-'):
             del tokens[-1]
             ast = '-'
             tokens.append(ast)
             ast = ""
+        # concatenate negative symbol to number
+        elif exp[x] == '-' and exp[x-1] in ['+', '-', '*', '/', '**', '(']:
+            no += exp[x]
+        # concatenate positive symbol to number
+        elif exp[x] == '+' and exp[x-1] in ['+', '-', '*', '/', '**', '(']:
+            no += exp[x]
         # concatenate asterik to another asterik
         elif (exp[x] == "*" and exp[x-1] == "*"):
             del tokens[-1]
@@ -74,50 +82,49 @@ def buildParseTree(exp):
             ast = "//"
             tokens.append(ast)
             ast = ""   
-        # concatenate 's', 'i', 'n' together
-        elif (exp[x] == 'n' and exp[x-1] == 'i' and exp[x-2] == 's'):
-            del tokens[-1]
-            del tokens[-1]
-            ast = "sin"
-            tokens.append(ast)
-            ast = ""
-        elif exp[x] == "sin":
-            exp[x] += no
+        # # concatenate 's', 'i', 'n' together
+        # elif (exp[x] == 'n' and exp[x-1] == 'i' and exp[x-2] == 's'):
+        #     del tokens[-1]
+        #     del tokens[-1]
+        #     ast = "sin"
+        #     tokens.append(ast)
+        #     ast = ""
         else:
             if no != "":
                 tokens.append(no)
             tokens.append(exp[x])
             no = ""
 
-    stack = Stack()
-    tree = BinaryTree('?')
+    # stack = stack()
+    tree = binaryTree('?')
     stack.push(tree)
     currentTree = tree
+
     print(tokens)
-    print(len(tokens))
     
     for t in tokens:
-        # RULE 1: If token is '(' add a new node as left child and descend into that node
+        # rule 1: If token is '(' add a new node as left child and descend into that node
         if t == '(':
             currentTree.insertLeft('?')
             stack.push(currentTree)
             currentTree = currentTree.getLeftTree()
-        # RULE 2: If token is operator, set key of current node to that operator and add a new node as right child and descend into that node
-        elif t in ['+', '-', '*', '/', '**', '//', '%', 'sin']:
+        # rule 2: If token is operator, set key of current node to that operator and add a new node as right child and descend into that node
+        elif t in ['+', '-', '*', '/', '**', '//', '%']:
             currentTree.setKey(t)
             currentTree.insertRight('?')
             stack.push(currentTree)
             currentTree = currentTree.getRightTree() 
-        # RULE 3: If token is number, set key of the current node to that number and return to parent
-        elif t not in ['+', '-', '*', '/', '**', '//', '%', 'sin', ')'] :
+        # rule 3: If token is number, set key of the current node to that number and return to parent
+        elif t not in ['+', '-', '*', '/', '**', '//', '%', ')']:
             currentTree.setKey(t)
             parent = stack.pop()
             currentTree = parent
-        # RULE 4: If token is ')' go to parent of current node
+        # rule 4: If token is ')' go to parent of current node
         elif t == ')':
             currentTree = stack.pop()
         else:
             raise ValueError
+
     return tree
 
 # evaluate the expression
@@ -142,8 +149,6 @@ def evaluate(tree):
             return float(evaluate(leftTree)) // float(evaluate(rightTree))
         elif op == "%":
             return float(evaluate(leftTree)) % float(evaluate(rightTree))
-        elif op == "sin":
-            return float(evaluate(math.sin(rightTree)))
     else:
         return tree.getKey()
 
@@ -158,7 +163,7 @@ def mergeSort(l):
             mergeSort(rightHalf)
             
             # declare the starting indexes as 0
-            leftIndex,rightIndex,mergeIndex = 0,0,0
+            leftIndex, rightIndex, mergeIndex = 0, 0, 0
             
             # declare mergeList as l (list)
             mergeList = l
@@ -207,7 +212,7 @@ def bubble(mydict):
     return d_items
 
 # sort by equation length
-def sortLength(lists):
+def sortsLength(lists):
     # this is the index to determine location in the big list
     index = 0 
     for x in lists:
@@ -219,7 +224,7 @@ def sortLength(lists):
             eqn_list = []
             # if it is a multiple element lists, loop through the big list
             for n in x:
-                eqn_list.append(Expression2(n[0]))
+                eqn_list.append(sortLength(n[0]))
 
             mergeSort(eqn_list)
             temp_list = []
@@ -246,6 +251,9 @@ def extractDigits(lst):
 # function to carry out choice 1  
 def choice1():
     exp = input("Please enter the expression you want to evaluate: \n")
+    while exp == '':
+        print("Expression is empty! Please input an expression!")
+        exp = input("Please enter the expression you want to evaluate: \n")
     exp = exp.replace(" ", "")
     tree = buildParseTree(exp)
     print()
@@ -334,12 +342,12 @@ def choice2():
     f = open(inputFile, 'r')
     for expressions in f:
         expressions = expressions.strip()
-        expressions = expresisions.replace(" ", "")
+        expressions = expressions.replace(" ", "")
         tree = buildParseTree(expressions)
         # here we evaluate the expression and then sort by value
         eqn_list.append(expressions)
-        l.insert(Expression(evaluate(tree)))
-        unstructured_list.append(Expression(evaluate(tree)))
+        l.insert(sortValue(evaluate(tree)))
+        unstructured_list.append(sortValue(evaluate(tree)))
     f.close()
 
     # make a dictionary for the equation and values
@@ -360,7 +368,7 @@ def choice2():
                 new_list.append([n])
     
     # sort the list that is sorted by value based on length of equation
-    finalSorted = sortLength(new_list)
+    finalSorted = sortsLength(new_list)
     
     temp_valList = [[x[1] for x in l] for l in finalSorted]
     expList = [[x[0] for x in l] for l in finalSorted]
@@ -385,7 +393,7 @@ def choice2():
     # then we print based on list index
     for val, exp in zip(valList, expList):
         result = val[0]
-        print(f'*** Expressions with value = {result}')
+        print(f'*** Expressions with value => {result}')
         for e in exp:
             print(f'{e} ==> {result}')
         print()
@@ -394,7 +402,7 @@ def choice2():
     f = open(outputFile, 'w')
     for val, exp in zip(valList, expList):
         result = val[0]
-        f.write(f'*** Expressions with value = {result}\n')
+        f.write(f'*** Expressions with value => {result}\n')
         for e in exp:
             f.write(f'{e} ==> {result}\n')
         f.write('\n')

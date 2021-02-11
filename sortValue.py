@@ -1,7 +1,7 @@
-from node import Node
+from node import node
 
-# to return the sorting based on length of equation
-class Expression2(Node):
+# to return the sorting based on value
+class sortValue(node):
     def __init__(self, name):
         self.name = name
         super().__init__()
@@ -21,6 +21,6 @@ class Expression2(Node):
     def __lt__(self, otherNode):
         if otherNode == None:
             raise TypeError("'<' not supported between instances of 'Expression' and 'NoneType'")
-        if len(self.name) == len(otherNode.name):
+        if self.name == otherNode.name:
             return self.name < otherNode.name
-        return len(self.name) < len(otherNode.name)
+        return self.name < otherNode.name

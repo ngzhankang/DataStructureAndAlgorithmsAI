@@ -6,7 +6,7 @@ class sortedList:
         self.currentNode = None
         self.length = 0
         self.compare_list = []
-
+    
     # append the next node as the head node
     def __appendToHead(self, newNode):
         oldHeadNode = self.headNode
