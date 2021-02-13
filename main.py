@@ -219,7 +219,6 @@ def displayBaseConversion():
             baseSelection = ''
             while baseSelection != '4':
                 baseSelection = input(">>> ")
-                print()
                 if baseSelection == '1':
                     print(f'The value {evaluate(tree)} converted to binary is: \n{toBinary(evaluate(tree))} (3 d.p)')
                     print()
@@ -227,12 +226,12 @@ def displayBaseConversion():
                     selectionMenu()
                 if baseSelection == '2':
                     hexed = float.hex(float(evaluate(tree)))
-                    print(f"The value {evaluate(tree)} converted to hexadecimal is: \n{hexed.split('x')[-1]} (3 d.p)") 
+                    print(f"The value {evaluate(tree)} converted to hexadecimal is: \n{hexed.split('x')[-1]}") 
                     print()
                     input("Press any key, to continue....")
                     selectionMenu()
                 if baseSelection == '3':
-                    print(f"The value {evaluate(tree)} converted to octal is: \n{toOctal(evaluate(tree))} (3 d.p)")
+                    print(f"The value {evaluate(tree)} converted to octal is: \n{toOctal(evaluate(tree))} (8 d.p)")
                     print()
                     input("Press any key, to continue....")
                     selectionMenu()
