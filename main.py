@@ -358,6 +358,12 @@ def choice2():
     # we also remove any whitespace so that we can compare length of equations fairly
     f = open(inputFile, 'r')
     for expressions in f:
+        # validate validity of expression here
+        validation = validate(expressions)
+        while validation == False:
+            print("Invalid Expression In File Detected! Check parenthesis! Returning to menu...")
+            print()
+            selectionMenu()
         expressions = expressions.strip()
         expressions = expressions.replace(" ", "")
         tree = buildParseTree(expressions)
