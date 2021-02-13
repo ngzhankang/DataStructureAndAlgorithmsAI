@@ -39,7 +39,26 @@ def selectionMenu():
             choice3()
         else:
             print("Invalid input! Please input 1, 2 or 3!")
-            
+
+# define how we validate our user equation first before we proceed on to deal with the equation
+def validate(myStr):    
+    open_list = ["[","{","("] 
+    close_list = ["]","}",")"] 
+    stack = []
+    for i in myStr:
+        if i in open_list:
+            stack.append(i)
+        elif i in close_list:
+            pos = close_list.index(i)
+            if ((len(stack) > 0) and (open_list[pos] == stack[len(stack) - 1])):
+                stack.pop()
+            else:
+                return False
+    if len(stack) == 0:
+        return True
+    else:
+        return False
+
 # build a parse tree
 def buildParseTree(exp):
     # tokenize the expression
@@ -320,12 +339,20 @@ def extractDigits(lst):
         res.append(sub) 
     return(res) 
 
+
+##############################################################################
+##############################################################################
 # main functions
 # function to carry out choice 1  
 def choice1():
     exp = input("Please enter the expression you want to evaluate: \n")
-    while exp == '':
-        print("Expression is empty! Please input an expression!")
+    # validate validity of expression here
+    validation = validate(exp)
+    while exp == '' or validation == False:
+        if exp == '':
+            print("Expression is empty! Please input an expression!")
+        else:
+            print("Invalid Expression! Check parenthesis!")            
         exp = input("Please enter the expression you want to evaluate: \n")
     exp = exp.replace(" ", "")
     global tree
@@ -418,6 +445,12 @@ def choice2():
     # we also remove any whitespace so that we can compare length of equations fairly
     f = open(inputFile, 'r')
     for expressions in f:
+        # validate validity of expression here
+        validation = validate(expressions)
+        while validation == False:
+            print("Invalid Expression In File Detected! Check parenthesis! Returning to menu...")
+            print()
+            selectionMenu()
         expressions = expressions.strip()
         expressions = expressions.replace(" ", "")
         tree = buildParseTree(expressions)
