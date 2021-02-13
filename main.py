@@ -1,7 +1,7 @@
 # import necessary classes and libraries
 import os.path
 import math
-from BinaryTree import binaryTree
+from binaryTree import binaryTree
 from sortValue import sortValue
 from sortLength import sortLength
 from node import node
@@ -82,13 +82,6 @@ def buildParseTree(exp):
             ast = "//"
             tokens.append(ast)
             ast = ""   
-        # # concatenate 's', 'i', 'n' together
-        # elif (exp[x] == 'n' and exp[x-1] == 'i' and exp[x-2] == 's'):
-        #     del tokens[-1]
-        #     del tokens[-1]
-        #     ast = "sin"
-        #     tokens.append(ast)
-        #     ast = ""
         else:
             if no != "":
                 tokens.append(no)
