@@ -1,13 +1,13 @@
 # import necessary classes and libraries
 import os.path
 import math
-from binaryTree import binaryTree
+from BinaryTree import binaryTree
 from sortValue import sortValue
 from sortLength import sortLength
 from node import node
 from sortedList import sortedList
 from stack import stack
-from treeLayout import newNode, print2D, print2DUtil
+from treeLayout import display
 
 stack = stack()
 
@@ -269,7 +269,8 @@ def choice1():
             tree.printPreorder(0)
             print()
             print("Binary Tree Diagram:")
-            print2D(tree)
+            display(tree)
+            # print2D(tree, evaluate(tree))
             print()
             print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
             input("Press any key, to continue....")
@@ -279,7 +280,8 @@ def choice1():
             tree.printPostorder(0)
             print()
             print("Binary Tree Diagram:")
-            print2D(tree)
+            display(tree)
+            # print2D(tree, evaluate(tree))
             print()
             print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
             input("Press any key, to continue....")
@@ -289,7 +291,8 @@ def choice1():
             tree.printInorder(0)
             print()
             print("Binary Tree Diagram:")
-            print2D(tree)
+            display(tree)
+            # print2D(tree, evaluate(tree))
             print()
             print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
             input("Press any key, to continue....")
