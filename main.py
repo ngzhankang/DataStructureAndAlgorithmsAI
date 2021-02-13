@@ -88,7 +88,6 @@ def buildParseTree(exp):
             tokens.append(exp[x])
             no = ""
 
-    # stack = stack()
     tree = binaryTree('?')
     stack.push(tree)
     currentTree = tree
