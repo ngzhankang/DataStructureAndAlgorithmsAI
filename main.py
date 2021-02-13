@@ -99,8 +99,6 @@ def buildParseTree(exp):
     tree = binaryTree('?')
     stack.push(tree)
     currentTree = tree
-
-    print(tokens)
     
     for t in tokens:
         # rule 1: If token is '(' add a new node as left child and descend into that node
