@@ -1,7 +1,7 @@
 # import necessary classes and libraries
 import os.path
 import math
-from binaryTree import binaryTree
+from BinaryTree import binaryTree
 from sortValue import sortValue
 from sortLength import sortLength
 from node import node
@@ -265,7 +265,6 @@ def choice1():
     exp = input("Please enter the expression you want to evaluate: \n")
     # validate validity of expression here
     validation = validate(exp)
-    print(validation)
     while exp == '' or validation == False:
         if exp == '':
             print("Expression is empty! Please input an expression!")
