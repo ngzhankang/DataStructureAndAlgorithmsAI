@@ -142,6 +142,89 @@ def evaluate(tree):
     else:
         return tree.getKey()
 
+# change "num" into a decimal < 1
+def toLessThanOne(num): 
+    while num > 1:
+        num /= 10
+    return num
+
+# converts float number to binary
+# we will round it to 3 places
+def toBinary(num, places=3):
+    integral, fractional = str(num).split(".")                 
+    integral, fractional = int(integral), int(fractional) 
+    if fractional == 0:
+        res = bin(integral).lstrip("0b")
+        return res
+    else:
+        res = bin(integral).lstrip("0b") + "."
+        for x in range(places):
+            integral, fractional = str((toLessThanOne(fractional)) * 2).split(".") 
+            fractional = int(fractional)
+            res += integral
+    return res
+
+# converts float number to octal
+# we will round it to 8 places
+def toOctal(num, places=8):
+    integral, fractional = str(num).split(".")                 
+    integral, fractional = int(integral), int(fractional)
+    if fractional == 0:
+        # removes the 0x in front of output
+        res = oct(integral)[2::]
+        return res
+    else:
+        res = oct(integral)[2::]+"."    
+        for x in range(places): 
+            integral, fractional = str((toLessThanOne(fractional)) * 8).split(".")            
+            fractional = int(fractional)
+            res += integral 
+    return res
+
+# display selection screen for base conversion
+def displayBaseConversion():
+    print("Do you want to convert the evaluated value? 'y' or 'n'")
+    baseSelect = ''
+    while baseSelect != 'n' or baseSelect != 'y':
+        baseSelect = input(">>> ")
+        if baseSelect == 'n':
+            input("Press any key, to continue....")
+            selectionMenu()
+        if baseSelect == 'y':
+            print()
+            print("How do you want to convert the evaluated value?")
+            print("  1. Convert to binary")
+            print("  2. Convert to hexadecimal")
+            print("  3. Convert to octal")
+            print("  4. Exit")
+            baseSelection = ''
+            while baseSelection != '4':
+                baseSelection = input(">>> ")
+                print()
+                if baseSelection == '1':
+                    print(f'The value {evaluate(tree)} converted to binary is: \n{toBinary(evaluate(tree))} (3 d.p)')
+                    print()
+                    input("Press any key, to continue....")
+                    selectionMenu()
+                if baseSelection == '2':
+                    hexed = float.hex(float(evaluate(tree)))
+                    print(f"The value {evaluate(tree)} converted to hexadecimal is: \n{hexed.split('x')[-1]} (3 d.p)") 
+                    print()
+                    input("Press any key, to continue....")
+                    selectionMenu()
+                if baseSelection == '3':
+                    print(f"The value {evaluate(tree)} converted to octal is: \n{toOctal(evaluate(tree))} (3 d.p)")
+                    print()
+                    input("Press any key, to continue....")
+                    selectionMenu()
+                if baseSelection == '4':
+                    print()
+                    choice3()
+                else:
+                    print("Invalid input! Please input 1, 2, 3 or 4!")
+        else:
+            print("Invalid input! Please input 'n' or 'y'")
+
 # sorting using merge sort method
 def mergeSort(l):
     for i in l:
@@ -245,6 +328,7 @@ def choice1():
         print("Expression is empty! Please input an expression!")
         exp = input("Please enter the expression you want to evaluate: \n")
     exp = exp.replace(" ", "")
+    global tree
     tree = buildParseTree(exp)
     print()
     print("How do you want to print the parse tree?")
@@ -255,42 +339,42 @@ def choice1():
     printSelect = ''
     while printSelect != '4':
         printSelect = input(">>> ")
-        print()
         if printSelect == '1':
+            print()
             print("Expression Tree: ")
             tree.printPreorder(0)
             print()
             print("Binary Tree Diagram:")
             display(tree)
-            # print2D(tree, evaluate(tree))
             print()
-            print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
-            input("Press any key, to continue....")
-            selectionMenu()
+            print(f'Expression evaluates to: \n{evaluate(tree)} \n')
+            displayBaseConversion()
+
         if printSelect == '2':
+            print()
             print("Expression Tree: ")
             tree.printPostorder(0)
             print()
             print("Binary Tree Diagram:")
             display(tree)
-            # print2D(tree, evaluate(tree))
             print()
-            print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
-            input("Press any key, to continue....")
-            selectionMenu()
+            print(f'Expression evaluates to: \n{evaluate(tree)} \n')
+            displayBaseConversion()
+
         if printSelect == '3':
+            print()
             print("Expression Tree: ")
             tree.printInorder(0)
             print()
             print("Binary Tree Diagram:")
             display(tree)
-            # print2D(tree, evaluate(tree))
             print()
             print(f'Expression evaluates to: \n{evaluate(tree)} \n')  
-            input("Press any key, to continue....")
-            selectionMenu()
+            displayBaseConversion()
+
         if printSelect == '4':
             choice3()
+
         else:
             print("Invalid input! Please input 1, 2, 3 or 4!")
 
