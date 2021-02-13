@@ -1,7 +1,7 @@
 # import necessary classes and libraries
 import os.path
 import math
-from BinaryTree import binaryTree
+from binaryTree import binaryTree
 from sortValue import sortValue
 from sortLength import sortLength
 from node import node
