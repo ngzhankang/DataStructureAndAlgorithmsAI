@@ -17,6 +17,8 @@ This repository is to archive the docs that triston and i did for this module du
 10. `stack.py` to call private functions encoded in different classes.
 11. `treeLayout.py` is a class to print out a visual tree layout of the list according to their value and how they are sorted. 
 
+The main problem file statement can be found [here.](./ST1507_ASSIGNMENT_TWO_AY2021_SEM2.pdf)
+
 # Contributors
 Main developers:  
 - Me
